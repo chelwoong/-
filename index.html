@@ -33,42 +33,42 @@
           } else if (data.autoJibunAddress == "") {
             jibunAddress = data.jibunAddress
           }
-          // var postData = {
-          //     address : data.address,
-          //     roadAddress : data.roadAddress,
-          //     jibunAddress : jibunAddress,
-          //     zonecode : data.zonecode
-          // };
-          // window.postMessageToiOS(postData);
+          var postData = {
+              address : data.address,
+              roadAddress : data.roadAddress,
+              jibunAddress : jibunAddress,
+              zonecode : data.zonecode
+          };
+          window.postMessageToiOS(postData);
 
             // https://blog.naver.com/jiwow34/221770170411
-            Promise.resolve(data).then(o => {
-                const { address } = data;
+            // Promise.resolve(data).then(o => {
+            //     const { address } = data;
 
-                return new Promise((resolve, reject) => {
-                    const geocoder = new daum.maps.services.Geocoder();
+            //     return new Promise((resolve, reject) => {
+            //         const geocoder = new daum.maps.services.Geocoder();
 
-                    geocoder.addressSearch(address, (result, status) =>{
-                        if(status === daum.maps.services.Status.OK){
-                            const { x, y } = result[0];
+            //         geocoder.addressSearch(address, (result, status) =>{
+            //             if(status === daum.maps.services.Status.OK){
+            //                 const { x, y } = result[0];
 
-                            resolve({ lat: y, lon: x })
-                        }else{
-                            reject();
-                        }
-                    });
-                })
-            }).then(result => {
-                // 위, 경도 결과 값
-                var postData = {
-                  address : data.address,
-                  roadAddress : data.roadAddress,
-                  jibunAddress : jibunAddress,
-                  zonecode : data.zonecode,
-                    coords : result
-              };
-              window.postMessageToiOS(postData);
-            });
+            //                 resolve({ lat: y, lon: x })
+            //             }else{
+            //                 reject();
+            //             }
+            //         });
+            //     })
+            // }).then(result => {
+            //     // 위, 경도 결과 값
+            //     var postData = {
+            //       address : data.address,
+            //       roadAddress : data.roadAddress,
+            //       jibunAddress : jibunAddress,
+            //       zonecode : data.zonecode,
+            //         coords : result
+            //   };
+            //   window.postMessageToiOS(postData);
+            // });
             
         },
         width : '100%',
