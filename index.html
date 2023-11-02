@@ -19,7 +19,11 @@
         window.webkit.messageHandlers.callBackHandler.postMessage(postData);
     }
 
+    //주소-좌표 변환 객체를 생성
+    var geocoder = new daum.maps.services.Geocoder();
+    
     var element_layer = document.getElementById('layer');
+    
     function execDaumPostcode() {
       new daum.Postcode({
         oncomplete: function(data) {
@@ -31,12 +35,39 @@
             jibunAddress = data.jibunAddress
           }
 
-          var postData = {
-              roadAddress : data.roadAddress,
-              jibunAddress : jibunAddress,
-              zonecode : data.zonecode
-          };
-          window.postMessageToiOS(postData);
+            var
+        geocoder.addressSearch(data.address, function(results, status) {
+                    // 정상적으로 검색이 완료됐으면
+                    if (status === daum.maps.services.Status.OK) {
+
+                        var result = results[0]; //첫번째 결과의 값을 활용
+                        var coords = new daum.maps.LatLng(result.y, result.x);
+                        var postData = {
+                          address : data.address,
+                          roadAddress : data.roadAddress,
+                          jibunAddress : jibunAddress,
+                          zonecode : data.zonecode,
+                            coords : coords
+                      };
+                    } else {
+                        var postData = {
+                          address : data.address,
+                          roadAddress : data.roadAddress,
+                          jibunAddress : jibunAddress,
+                          zonecode : data.zonecode
+                      };
+                    }
+                    window.postMessageToiOS(postData);
+                });
+            
+
+          // var postData = {
+          //     address : data.address,
+          //     roadAddress : data.roadAddress,
+          //     jibunAddress : jibunAddress,
+          //     zonecode : data.zonecode
+          // };
+          // window.postMessageToiOS(postData);
         },
         width : '100%',
         height : '100%'
